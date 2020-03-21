@@ -91,11 +91,11 @@ h3 {
 }
 
 .wrapper__ticket {
-    display: block;
+    display: none;
 }
 
 .block__ticket {
-    display: block;
+    display: none;
 }
 
 input {
@@ -276,6 +276,18 @@ input {
     margin: 50px 0;
 }
 
+.error {
+    border: 0.5px solid #be4f4f!important;
+}
+
+.error-message {
+    display: none;
+    color: #be4f4f!important;
+    
+}
+
+
+
 @media(max-width: 768px) {
     .ticket__wrapper {
         -ms-flex-wrap: wrap;
@@ -306,3 +318,4 @@ input {
         margin-bottom: 20px;
     }
 }
+

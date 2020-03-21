@@ -5,7 +5,8 @@ const formSeach = document.querySelector('.form-search'),
     dropdownCitiesTo = formSeach.querySelector('.dropdown__cities-to'),
     inputDateDepart = formSeach.querySelector('.input__date-depart'),
     cheapestTicket = document.getElementById('cheapest-ticket'),
-    otherCheapTickets = document.getElementById('other-cheap-tickets');
+    otherCheapTickets = document.getElementById('other-cheap-tickets'),
+    ErrorsList = formSeach.querySelectorAll('.error-message');
 
 
 //'dataBase/cities.json'
@@ -30,7 +31,7 @@ const getData = (url, callback) => {
         if (request.status === 200) {
             callback(request.response);
         } else {
-            console.error(request.status);
+            reject(request.status);
         }
     });
 
@@ -39,6 +40,14 @@ const getData = (url, callback) => {
 
 
 const showCity = (input, list) => {
+    if (inputCitiesFrom.classList.contains('error')) {
+        inputCitiesFrom.classList.remove('error');
+        ErrorsList[0].style.display = 'none';
+    }
+    if (inputCitiesTo.classList.contains('error')) {
+        inputCitiesTo.classList.remove('error');
+        ErrorsList[1].style.display = 'none';
+    }
     list.textContent = '';
 
     if (input.value !== '') {
@@ -203,10 +212,10 @@ formSeach.addEventListener('submit', (event) => {
     event.preventDefault();
 
     const cityFrom = city.find((item) => {
-        return inputCitiesFrom.value === item.name
+        return inputCitiesFrom.value === item.name;
     });
     const cityTo = city.find((item) => {
-        return inputCitiesTo.value === item.name
+        return inputCitiesTo.value === item.name;
     });
 
     const formData = {
@@ -221,9 +230,19 @@ formSeach.addEventListener('submit', (event) => {
 
         getData(calendar + requestData, (response) => {
             renderCheap(response, formData.when);
+        }, error => {
+            alert('По этому направлении нет рейсов');
+            console.error('Ошибка', error);
         });
     } else {
-        alert('Учи русский!');
+        if (formData.from == undefined) {
+            ErrorsList[0].style.display = "block";
+            inputCitiesFrom.classList.add('error');
+        }
+        if (formData.to == undefined) {
+            ErrorsList[1].style.display = "block";
+            inputCitiesTo.classList.add('error');
+        }
     }
 
     /*const requestData2 = '?depart_date=' + formData.when +
